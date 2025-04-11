@@ -21,6 +21,7 @@ import {
   getLegalCaseStatusData,
   getIncidentTypeData,
   getNotificationMethodData,
+  getNationalityDistributionData
 } from "@/app/actions/additional-data-actions"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { DashboardShell } from "@/components/dashboard/dashboard-shell"
@@ -42,6 +43,7 @@ import { NotificationMethodChart } from "@/components/dashboard/notification-met
 import { ChartSkeleton } from "@/components/dashboard/chart-skeleton"
 import { EmailVerification } from "@/components/dashboard/email-verification"
 import { Skeleton } from "@/components/ui/skeleton"
+import { NationalityDistributionChart } from "@/components/dashboard/nationality-distribution-chart"
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
@@ -65,6 +67,7 @@ export default function DashboardPage() {
   const [legalCaseStatusData, setLegalCaseStatusData] = useState([])
   const [incidentTypeData, setIncidentTypeData] = useState([])
   const [notificationMethodData, setNotificationMethodData] = useState([])
+  const [nationalityData, setNationalityData] = useState([])
 
   useEffect(() => {
     // Check if user is already verified from session storage
@@ -98,6 +101,7 @@ export default function DashboardPage() {
         caseStatusData,
         incidentData,
         notificationData,
+        nationalityDistribution
       ] = await Promise.all([
         getSubmissionsStats(),
         getUniversityDistribution(),
@@ -114,6 +118,7 @@ export default function DashboardPage() {
         getLegalCaseStatusData(),
         getIncidentTypeData(),
         getNotificationMethodData(),
+        getNationalityDistributionData()
       ])
 
       // Update state with fetched data
@@ -132,6 +137,8 @@ export default function DashboardPage() {
       setLegalCaseStatusData(caseStatusData)
       setIncidentTypeData(incidentData)
       setNotificationMethodData(notificationData)
+      setNationalityData(nationalityDistribution)
+
     } catch (error) {
       console.error("Error fetching dashboard data:", error)
     } finally {
@@ -220,6 +227,15 @@ export default function DashboardPage() {
                     </CardHeader>
                     <CardContent className="h-[300px] sm:h-[350px]">
                       {loading ? <ChartSkeleton /> : <StatusDistributionChart data={statusDistribution || []} />}
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Nationality Distribution</CardTitle>
+                      <CardDescription>Top 10 nationalities of affected students</CardDescription>
+                    </CardHeader>
+                    <CardContent className="h-[300px]">
+                      {loading ? <ChartSkeleton /> : <NationalityDistributionChart data={nationalityData || []} />}
                     </CardContent>
                   </Card>
                 </div>

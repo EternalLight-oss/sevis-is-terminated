@@ -5,6 +5,7 @@ import { createServerSupabaseClient } from "@/lib/supabase"
 // Define the type for the form data
 type FormData = {
   email: string
+  nationality: string
   university: string
   other_university?: string
   sevis_terminated: string
@@ -563,6 +564,44 @@ export async function getImmediatePlansData() {
     return plansData
   } catch (error) {
     console.error("Error in getImmediatePlansData:", error)
+    return [] // Return empty array if there's an error
+  }
+}
+// Add a function to get nationality distribution
+export async function getNationalityDistribution() {
+  try {
+    const supabase = createServerSupabaseClient()
+
+    const { data, error } = await supabase.from("submissions").select("nationality").not("nationality", "is", null)
+
+    if (error) {
+      console.error("Error getting nationality distribution:", error)
+      throw new Error("Failed to get nationality distribution")
+    }
+
+    // Handle empty data
+    if (!data || data.length === 0) {
+      return []
+    }
+
+    // Count occurrences of each nationality
+    const nationalityCounts: Record<string, number> = {}
+    data.forEach((item) => {
+      if (item.nationality) {
+        nationalityCounts[item.nationality] = (nationalityCounts[item.nationality] || 0) + 1
+      }
+    })
+
+    // Convert to array of objects for charting
+    const nationalityDistribution = Object.entries(nationalityCounts).map(([name, count]) => ({
+      name,
+      count,
+    }))
+
+    // Sort by count in descending order
+    return nationalityDistribution.sort((a, b) => b.count - a.count)
+  } catch (error) {
+    console.error("Error in getNationalityDistribution:", error)
     return [] // Return empty array if there's an error
   }
 }
