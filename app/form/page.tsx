@@ -1,5 +1,5 @@
 "use client";
-
+import type React from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -63,7 +63,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { countries } from "@/lib/countries";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { InfoIcon, ShieldCheck } from "lucide-react";
+import { hashEmail, shortenHash } from "@/lib/hash-utils";
 // Define the form schema with Zod
 const formSchema = z.object({
   email: z
@@ -296,15 +303,28 @@ const immediatePlans = [
   { id: "waiting", label: "Waiting / Undecided / Gathering Information" },
   { id: "contacting-university", label: "Contacting University DSO/Officials" },
 ];
-
+// Simple tooltip info component
+function TooltipInfo({ content }: { content: React.ReactNode }) {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <InfoIcon className="h-4 w-4 ml-1 text-muted-foreground cursor-help" />
+        </TooltipTrigger>
+        <TooltipContent className="max-w-xs">{content}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
 export default function FormPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const [nationalityOpen, setNationalityOpen] = useState(false)
+  const [nationalityOpen, setNationalityOpen] = useState(false);
   const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
+  const [hashedValue, setHashedValue] = useState("");
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -358,6 +378,7 @@ export default function FormPage() {
       await submitFormData(finalData, showDuplicateDialog);
       setSubmitSuccess(true);
       setShowDuplicateDialog(false);
+      setHashedValue("");
 
       // Reset form after successful submission
       form.reset();
@@ -376,6 +397,15 @@ export default function FormPage() {
     }
   }
 
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const emailValue = e.target.value;
+    form.setValue("email", emailValue);
+    if (emailValue) {
+      setHashedValue(hashEmail(emailValue));
+    } else {
+      setHashedValue("");
+    }
+  };
   if (submitSuccess) {
     return (
       <div className="container mx-auto px-4 py-12">
@@ -447,15 +477,35 @@ export default function FormPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Email Address (.edu required)</FormLabel>
+
                       <FormControl>
                         <Input
                           placeholder="your.email@university.edu"
                           {...field}
+                          onChange={handleEmailChange}
                         />
                       </FormControl>
+                      {hashedValue && (
+                        <div className="text-xs text-muted-foreground mt-1">
+                          <span>Stored as: </span>
+                          <code className="bg-muted px-1 py-0.5 rounded">
+                            {shortenHash(hashedValue)}
+                          </code>
+                        </div>
+                      )}
+                      <Alert variant="default" className="mt-2 bg-blue-50 border-blue-200 text-blue-800">
+                      <ShieldCheck className="h-4 w-4" />
+                        <AlertTitle>Privacy Protection</AlertTitle>
+                        <AlertDescription>
+                          For your privacy, we hash your email before storing
+                          it. This converts your email into a unique code that
+                          cannot be reversed, allowing us to prevent duplicate
+                          submissions without storing your actual email address.
+                        </AlertDescription>
+                      </Alert>
                       <FormDescription>
                         Your email is only used to prevent duplicate submissions
-                        and will not be shared.
+                        and will be stored as a secure hash, not as plain text.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -860,7 +910,7 @@ export default function FormPage() {
                               mode="single"
                               selected={field.value || undefined}
                               onSelect={field.onChange}
-                              disabled={(date) =>
+                              disable={(date) =>
                                 date > new Date() ||
                                 date < new Date("2025-01-01")
                               }
@@ -1161,8 +1211,8 @@ export default function FormPage() {
                             </FormControl>
                             <SelectContent>
                               <SelectItem value="Traffic Misdemeanor">
-                                Traffic Misdemeanor (e.g., reckless driving,
-                                &gt;20mph over)
+                                Traffic Misdemeanor (e.g., reckless driving,{" "}
+                                {">"}20mph over)
                               </SelectItem>
                               <SelectItem value="DUI/DWI">DUI/DWI</SelectItem>
                               <SelectItem value="Drug-related">

@@ -1,5 +1,5 @@
 "use server"
-
+import { hashEmail } from "@/lib/hash-utils"
 import { createServerSupabaseClient } from "@/lib/supabase"
 
 // Define the type for the form data
@@ -32,9 +32,9 @@ type FormData = {
 export async function checkEmailExists(email: string): Promise<boolean> {
   try {
     const supabase = createServerSupabaseClient()
+    const hashedEmail = hashEmail(email)
 
-    const { data, error } = await supabase.from("submissions").select("email").eq("email", email).maybeSingle()
-
+    const { data, error } = await supabase.from("submissions").select("email").eq("email", hashedEmail).maybeSingle()
     if (error) {
       console.error("Error checking email:", error)
       return false
@@ -52,14 +52,16 @@ export async function checkEmailExists(email: string): Promise<boolean> {
 export async function submitFormData(formData: FormData, overwrite = false) {
   try {
     const supabase = createServerSupabaseClient()
+    const hashedEmail = hashEmail(formData.email)
 
     if (overwrite) {
       // Delete existing record with the same email
-      await supabase.from("submissions").delete().eq("email", formData.email)
+      await supabase.from("submissions").delete().eq("email", hashedEmail)
     }
 
     // Create a new object without the other_university field
     const { other_university, ...dataToSubmit } = formData
+    dataToSubmit.email = hashedEmail
 
     // If university is "Other", use the other_university value
     if (formData.university === "Other" && formData.other_university) {
