@@ -1,8 +1,14 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   getSubmissionsStats,
   getUniversityDistribution,
@@ -12,7 +18,7 @@ import {
   getLawEnforcementData,
   getLegalConsultationData,
   getImmediatePlansData,
-} from "@/app/actions/form-actions"
+} from "@/app/actions/form-actions";
 import {
   getAcademicLevelData,
   getFingerprintingData,
@@ -21,68 +27,70 @@ import {
   getLegalCaseStatusData,
   getIncidentTypeData,
   getNotificationMethodData,
-  getNationalityDistributionData
-} from "@/app/actions/additional-data-actions"
-import { DashboardHeader } from "@/components/dashboard/dashboard-header"
-import { DashboardShell } from "@/components/dashboard/dashboard-shell"
-import { DashboardStats } from "@/components/dashboard/dashboard-stats"
-import { UniversityDistributionChart } from "@/components/dashboard/university-distribution-chart"
-import { StatusDistributionChart } from "@/components/dashboard/status-distribution-chart"
-import { TerminationReasonChart } from "@/components/dashboard/termination-reason-chart"
-import { TimelineChart } from "@/components/dashboard/timeline-chart"
-import { LawEnforcementChart } from "@/components/dashboard/law-enforcement-chart"
-import { LegalConsultationChart } from "@/components/dashboard/legal-consultation-chart"
-import { ImmediatePlansChart } from "@/components/dashboard/immediate-plans-chart"
-import { AcademicLevelChart } from "@/components/dashboard/academic-level-chart"
-import { FingerprintingChart } from "@/components/dashboard/fingerprinting-chart"
-import { ArrestChart } from "@/components/dashboard/arrest-chart"
-import { H1BStatusChart } from "@/components/dashboard/h1b-status-chart"
-import { LegalCaseStatusChart } from "@/components/dashboard/legal-case-status-chart"
-import { IncidentTypeChart } from "@/components/dashboard/incident-type-chart"
-import { NotificationMethodChart } from "@/components/dashboard/notification-method-chart"
-import { ChartSkeleton } from "@/components/dashboard/chart-skeleton"
-import { EmailVerification } from "@/components/dashboard/email-verification"
-import { Skeleton } from "@/components/ui/skeleton"
-import { NationalityDistributionChart } from "@/components/dashboard/nationality-distribution-chart"
+  getNationalityDistributionData,
+} from "@/app/actions/additional-data-actions";
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import { DashboardShell } from "@/components/dashboard/dashboard-shell";
+import { DashboardStats } from "@/components/dashboard/dashboard-stats";
+import { UniversityDistributionChart } from "@/components/dashboard/university-distribution-chart";
+import { StatusDistributionChart } from "@/components/dashboard/status-distribution-chart";
+import { TerminationReasonChart } from "@/components/dashboard/termination-reason-chart";
+import { TimelineChart } from "@/components/dashboard/timeline-chart";
+import { LawEnforcementChart } from "@/components/dashboard/law-enforcement-chart";
+import { LegalConsultationChart } from "@/components/dashboard/legal-consultation-chart";
+import { ImmediatePlansChart } from "@/components/dashboard/immediate-plans-chart";
+import { AcademicLevelChart } from "@/components/dashboard/academic-level-chart";
+import { FingerprintingChart } from "@/components/dashboard/fingerprinting-chart";
+import { ArrestChart } from "@/components/dashboard/arrest-chart";
+import { H1BStatusChart } from "@/components/dashboard/h1b-status-chart";
+import { LegalCaseStatusChart } from "@/components/dashboard/legal-case-status-chart";
+import { IncidentTypeChart } from "@/components/dashboard/incident-type-chart";
+import { NotificationMethodChart } from "@/components/dashboard/notification-method-chart";
+import { ChartSkeleton } from "@/components/dashboard/chart-skeleton";
+import { EmailVerification } from "@/components/dashboard/email-verification";
+import { Skeleton } from "@/components/ui/skeleton";
+import { NationalityDistributionChart } from "@/components/dashboard/nationality-distribution-chart";
 
 export default function DashboardPage() {
-  const [loading, setLoading] = useState(true)
-  const [isVerified, setIsVerified] = useState(false)
+  const [loading, setLoading] = useState(true);
+  const [isVerified, setIsVerified] = useState(false);
   const [stats, setStats] = useState({
     totalSubmissions: 0,
     sevisTerminated: 0,
     visaRevoked: 0,
-  })
-  const [universityDistribution, setUniversityDistribution] = useState([])
-  const [statusDistribution, setStatusDistribution] = useState([])
-  const [terminationReasonDistribution, setTerminationReasonDistribution] = useState([])
-  const [timelineData, setTimelineData] = useState([])
-  const [lawEnforcementData, setLawEnforcementData] = useState([])
-  const [legalConsultationData, setLegalConsultationData] = useState([])
-  const [immediatePlansData, setImmediatePlansData] = useState([])
-  const [academicLevelData, setAcademicLevelData] = useState([])
-  const [fingerprintingData, setFingerprintingData] = useState([])
-  const [arrestData, setArrestData] = useState([])
-  const [h1bStatusData, setH1bStatusData] = useState([])
-  const [legalCaseStatusData, setLegalCaseStatusData] = useState([])
-  const [incidentTypeData, setIncidentTypeData] = useState([])
-  const [notificationMethodData, setNotificationMethodData] = useState([])
-  const [nationalityData, setNationalityData] = useState([])
+  });
+  const [universityDistribution, setUniversityDistribution] = useState([]);
+  const [statusDistribution, setStatusDistribution] = useState([]);
+  const [terminationReasonDistribution, setTerminationReasonDistribution] =
+    useState([]);
+  const [timelineData, setTimelineData] = useState([]);
+  const [lawEnforcementData, setLawEnforcementData] = useState([]);
+  const [legalConsultationData, setLegalConsultationData] = useState([]);
+  const [immediatePlansData, setImmediatePlansData] = useState([]);
+  const [academicLevelData, setAcademicLevelData] = useState([]);
+  const [fingerprintingData, setFingerprintingData] = useState([]);
+  const [arrestData, setArrestData] = useState([]);
+  const [h1bStatusData, setH1bStatusData] = useState([]);
+  const [legalCaseStatusData, setLegalCaseStatusData] = useState([]);
+  const [incidentTypeData, setIncidentTypeData] = useState([]);
+  const [notificationMethodData, setNotificationMethodData] = useState([]);
+  const [nationalityData, setNationalityData] = useState([]);
 
   useEffect(() => {
     // Check if user is already verified from session storage
-    const isAlreadyVerified = sessionStorage.getItem("dashboardVerified") === "true"
-    setIsVerified(isAlreadyVerified)
+    const isAlreadyVerified =
+      sessionStorage.getItem("dashboardVerified") === "true";
+    setIsVerified(isAlreadyVerified);
 
     // Only fetch data if verified
     if (isAlreadyVerified) {
-      fetchDashboardData()
+      fetchDashboardData();
     }
-  }, [])
+  }, []);
 
   const fetchDashboardData = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
 
       // Fetch all data in parallel
       const [
@@ -101,7 +109,7 @@ export default function DashboardPage() {
         caseStatusData,
         incidentData,
         notificationData,
-        nationalityDistribution
+        nationalityDistribution,
       ] = await Promise.all([
         getSubmissionsStats(),
         getUniversityDistribution(),
@@ -118,44 +126,49 @@ export default function DashboardPage() {
         getLegalCaseStatusData(),
         getIncidentTypeData(),
         getNotificationMethodData(),
-        getNationalityDistributionData()
-      ])
+        getNationalityDistributionData(),
+      ]);
 
       // Update state with fetched data
-      setStats(statsData)
-      setUniversityDistribution(universityData)
-      setStatusDistribution(statusData)
-      setTerminationReasonDistribution(reasonData)
-      setTimelineData(timeline)
-      setLawEnforcementData(lawData)
-      setLegalConsultationData(legalData)
-      setImmediatePlansData(plansData)
-      setAcademicLevelData(academicData)
-      setFingerprintingData(fingerprintData)
-      setArrestData(arrestInfo)
-      setH1bStatusData(h1bData)
-      setLegalCaseStatusData(caseStatusData)
-      setIncidentTypeData(incidentData)
-      setNotificationMethodData(notificationData)
-      setNationalityData(nationalityDistribution)
-
+      setStats(statsData);
+      setUniversityDistribution(universityData);
+      setStatusDistribution(statusData);
+      setTerminationReasonDistribution(reasonData);
+      setTimelineData(timeline);
+      setLawEnforcementData(lawData);
+      setLegalConsultationData(legalData);
+      setImmediatePlansData(plansData);
+      setAcademicLevelData(academicData);
+      setFingerprintingData(fingerprintData);
+      setArrestData(arrestInfo);
+      setH1bStatusData(h1bData);
+      setLegalCaseStatusData(caseStatusData);
+      setIncidentTypeData(incidentData);
+      setNotificationMethodData(notificationData);
+      setNationalityData(nationalityDistribution);
     } catch (error) {
-      console.error("Error fetching dashboard data:", error)
+      console.error("Error fetching dashboard data:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleVerificationSuccess = () => {
-    setIsVerified(true)
-    fetchDashboardData()
-  }
+    setIsVerified(true);
+    fetchDashboardData();
+  };
 
   return (
     <>
-      {!isVerified && <EmailVerification onVerificationSuccess={handleVerificationSuccess} />}
+      {!isVerified && (
+        <EmailVerification onVerificationSuccess={handleVerificationSuccess} />
+      )}
 
-      <div className={`transition-all duration-300 ${!isVerified ? "filter blur-md pointer-events-none" : ""}`}>
+      <div
+        className={`transition-all duration-300 ${
+          !isVerified ? "filter blur-md pointer-events-none" : ""
+        }`}
+      >
         <DashboardShell>
           <DashboardHeader
             heading="F-1 Student Data Dashboard"
@@ -164,7 +177,7 @@ export default function DashboardPage() {
 
           <div className="grid gap-6">
             {loading ? (
-              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
                 {Array(3)
                   .fill(null)
                   .map((_, i) => (
@@ -186,36 +199,49 @@ export default function DashboardPage() {
             )}
 
             <Tabs defaultValue="overview" className="space-y-4">
-              <TabsList className="flex flex-wrap w-full">
-                <TabsTrigger value="overview" className="flex-1">Overview</TabsTrigger>
-                <TabsTrigger value="details" className="flex-1">Detailed Analysis</TabsTrigger>
-                <TabsTrigger value="additional" className="flex-1">Additional Insights</TabsTrigger>
-              </TabsList>
+              <div className="overflow-x-auto pb-2">
+                <TabsList className="inline-flex w-auto min-w-full">
+                  <TabsTrigger value="overview">Overview</TabsTrigger>
+                  <TabsTrigger value="details">Detailed Analysis</TabsTrigger>
+                  <TabsTrigger value="additional">
+                    Additional Insights
+                  </TabsTrigger>
+                </TabsList>
+              </div>
 
               <TabsContent value="overview" className="space-y-4">
-                <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
-                  <Card className="col-span-1 lg:col-span-2">
-                    <CardHeader>
-                      <CardTitle>Timeline of Reported Incidents</CardTitle>
-                      <CardDescription>
-                        Number of reported SEVIS terminations and visa revocations by month
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px] md:h-[400px]">
-                      {loading ? <ChartSkeleton /> : <TimelineChart data={timelineData || []} />}
-                    </CardContent>
-                  </Card>
+                <Card className="col-span-1">
+                  <CardHeader>
+                    <CardTitle>Timeline of Reported Incidents</CardTitle>
+                    <CardDescription>
+                      Number of reported SEVIS terminations and visa revocations
+                      by month
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="h-[300px]">
+                    {loading ? (
+                      <ChartSkeleton />
+                    ) : (
+                      <TimelineChart data={timelineData || []} />
+                    )}
+                  </CardContent>
+                </Card>
 
+                <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                   <Card>
                     <CardHeader>
                       <CardTitle>University Distribution</CardTitle>
-                      <CardDescription>Number of reports per university</CardDescription>
+                      <CardDescription>
+                        Number of reports per university
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px]">
+                    <CardContent className="h-[300px]">
                       {loading ? (
                         <ChartSkeleton />
                       ) : (
-                        <UniversityDistributionChart data={universityDistribution || []} />
+                        <UniversityDistributionChart
+                          data={universityDistribution || []}
+                        />
                       )}
                     </CardContent>
                   </Card>
@@ -223,19 +249,35 @@ export default function DashboardPage() {
                   <Card>
                     <CardHeader>
                       <CardTitle>Status at Time of Incident</CardTitle>
-                      <CardDescription>Distribution by student status</CardDescription>
+                      <CardDescription>
+                        Distribution by student status
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px]">
-                      {loading ? <ChartSkeleton /> : <StatusDistributionChart data={statusDistribution || []} />}
+                    <CardContent className="h-[300px]">
+                      {loading ? (
+                        <ChartSkeleton />
+                      ) : (
+                        <StatusDistributionChart
+                          data={statusDistribution || []}
+                        />
+                      )}
                     </CardContent>
                   </Card>
                   <Card>
                     <CardHeader>
                       <CardTitle>Nationality Distribution</CardTitle>
-                      <CardDescription>Top 10 nationalities of affected students</CardDescription>
+                      <CardDescription>
+                        Top 10 nationalities of affected students
+                      </CardDescription>
                     </CardHeader>
                     <CardContent className="h-[300px]">
-                      {loading ? <ChartSkeleton /> : <NationalityDistributionChart data={nationalityData || []} />}
+                      {loading ? (
+                        <ChartSkeleton />
+                      ) : (
+                        <NationalityDistributionChart
+                          data={nationalityData || []}
+                        />
+                      )}
                     </CardContent>
                   </Card>
                 </div>
@@ -246,13 +288,17 @@ export default function DashboardPage() {
                   <Card>
                     <CardHeader>
                       <CardTitle>Reasons for Termination/Revocation</CardTitle>
-                      <CardDescription>Breakdown of cited reasons</CardDescription>
+                      <CardDescription>
+                        Breakdown of cited reasons
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px]">
+                    <CardContent className="h-[300px]">
                       {loading ? (
                         <ChartSkeleton />
                       ) : (
-                        <TerminationReasonChart data={terminationReasonDistribution || []} />
+                        <TerminationReasonChart
+                          data={terminationReasonDistribution || []}
+                        />
                       )}
                     </CardContent>
                   </Card>
@@ -260,30 +306,51 @@ export default function DashboardPage() {
                   <Card>
                     <CardHeader>
                       <CardTitle>Link to Law Enforcement Interaction</CardTitle>
-                      <CardDescription>Was the termination/revocation linked to law enforcement?</CardDescription>
+                      <CardDescription>
+                        Was the termination/revocation linked to law
+                        enforcement?
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px]">
-                      {loading ? <ChartSkeleton /> : <LawEnforcementChart data={lawEnforcementData || []} />}
+                    <CardContent className="h-[300px]">
+                      {loading ? (
+                        <ChartSkeleton />
+                      ) : (
+                        <LawEnforcementChart data={lawEnforcementData || []} />
+                      )}
                     </CardContent>
                   </Card>
 
                   <Card>
                     <CardHeader>
                       <CardTitle>Attorney Consultation</CardTitle>
-                      <CardDescription>Have students consulted with an immigration attorney?</CardDescription>
+                      <CardDescription>
+                        Have students consulted with an immigration attorney?
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px]">
-                      {loading ? <ChartSkeleton /> : <LegalConsultationChart data={legalConsultationData || []} />}
+                    <CardContent className="h-[300px]">
+                      {loading ? (
+                        <ChartSkeleton />
+                      ) : (
+                        <LegalConsultationChart
+                          data={legalConsultationData || []}
+                        />
+                      )}
                     </CardContent>
                   </Card>
 
                   <Card>
                     <CardHeader>
                       <CardTitle>Immediate Plans</CardTitle>
-                      <CardDescription>What are students planning to do next?</CardDescription>
+                      <CardDescription>
+                        What are students planning to do next?
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px]">
-                      {loading ? <ChartSkeleton /> : <ImmediatePlansChart data={immediatePlansData || []} />}
+                    <CardContent className="h-[300px]">
+                      {loading ? (
+                        <ChartSkeleton />
+                      ) : (
+                        <ImmediatePlansChart data={immediatePlansData || []} />
+                      )}
                     </CardContent>
                   </Card>
                 </div>
@@ -295,71 +362,117 @@ export default function DashboardPage() {
                     <CardHeader>
                       <CardTitle>Academic Level</CardTitle>
                       <CardDescription>
-                        Distribution by academic level (for students in academic programs)
+                        Distribution by academic level (for students in academic
+                        programs)
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px]">
-                      {loading ? <ChartSkeleton /> : <AcademicLevelChart data={academicLevelData || []} />}
+                    <CardContent className="h-[300px]">
+                      {loading ? (
+                        <ChartSkeleton />
+                      ) : (
+                        <AcademicLevelChart data={academicLevelData || []} />
+                      )}
                     </CardContent>
                   </Card>
 
                   <Card>
                     <CardHeader>
                       <CardTitle>Fingerprinting Status</CardTitle>
-                      <CardDescription>Were students fingerprinted related to their incident?</CardDescription>
+                      <CardDescription>
+                        Were students fingerprinted related to their incident?
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px]">
-                      {loading ? <ChartSkeleton /> : <FingerprintingChart data={fingerprintingData || []} />}
+                    <CardContent className="h-[300px]">
+                      {loading ? (
+                        <ChartSkeleton />
+                      ) : (
+                        <FingerprintingChart data={fingerprintingData || []} />
+                      )}
                     </CardContent>
                   </Card>
 
                   <Card>
                     <CardHeader>
                       <CardTitle>Arrest Status</CardTitle>
-                      <CardDescription>Were students arrested related to their incident?</CardDescription>
+                      <CardDescription>
+                        Were students arrested related to their incident?
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px]">
-                      {loading ? <ChartSkeleton /> : <ArrestChart data={arrestData || []} />}
+                    <CardContent className="h-[300px]">
+                      {loading ? (
+                        <ChartSkeleton />
+                      ) : (
+                        <ArrestChart data={arrestData || []} />
+                      )}
                     </CardContent>
                   </Card>
 
                   <Card>
                     <CardHeader>
                       <CardTitle>H1B Lottery Status</CardTitle>
-                      <CardDescription>Current fiscal year H1B lottery status</CardDescription>
+                      <CardDescription>
+                        Current fiscal year H1B lottery status
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px]">
-                      {loading ? <ChartSkeleton /> : <H1BStatusChart data={h1bStatusData || []} />}
+                    <CardContent className="h-[300px]">
+                      {loading ? (
+                        <ChartSkeleton />
+                      ) : (
+                        <H1BStatusChart data={h1bStatusData || []} />
+                      )}
                     </CardContent>
                   </Card>
 
                   <Card>
                     <CardHeader>
                       <CardTitle>Legal Case Status</CardTitle>
-                      <CardDescription>Current status of related legal cases</CardDescription>
+                      <CardDescription>
+                        Current status of related legal cases
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px]">
-                      {loading ? <ChartSkeleton /> : <LegalCaseStatusChart data={legalCaseStatusData || []} />}
+                    <CardContent className="h-[300px]">
+                      {loading ? (
+                        <ChartSkeleton />
+                      ) : (
+                        <LegalCaseStatusChart
+                          data={legalCaseStatusData || []}
+                        />
+                      )}
                     </CardContent>
                   </Card>
 
                   <Card>
                     <CardHeader>
                       <CardTitle>Incident Type</CardTitle>
-                      <CardDescription>Types of incidents related to law enforcement interactions</CardDescription>
+                      <CardDescription>
+                        Types of incidents related to law enforcement
+                        interactions
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px]">
-                      {loading ? <ChartSkeleton /> : <IncidentTypeChart data={incidentTypeData || []} />}
+                    <CardContent className="h-[300px]">
+                      {loading ? (
+                        <ChartSkeleton />
+                      ) : (
+                        <IncidentTypeChart data={incidentTypeData || []} />
+                      )}
                     </CardContent>
                   </Card>
 
                   <Card className="col-span-1 md:col-span-2">
                     <CardHeader>
                       <CardTitle>SEVIS Notification Method</CardTitle>
-                      <CardDescription>How students were notified of their SEVIS termination</CardDescription>
+                      <CardDescription>
+                        How students were notified of their SEVIS termination
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[300px] sm:h-[350px]">
-                      {loading ? <ChartSkeleton /> : <NotificationMethodChart data={notificationMethodData || []} />}
+                    <CardContent className="h-[300px]">
+                      {loading ? (
+                        <ChartSkeleton />
+                      ) : (
+                        <NotificationMethodChart
+                          data={notificationMethodData || []}
+                        />
+                      )}
                     </CardContent>
                   </Card>
                 </div>
@@ -371,10 +484,13 @@ export default function DashboardPage() {
                 <CardTitle>Important Disclaimer</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground text-sm sm:text-base">
-                  This dashboard presents user-reported data for informational and advocacy purposes only. The data may
-                  contain inaccuracies, is not exhaustive, and <strong>does not constitute legal advice</strong>. If you
-                  are experiencing immigration issues, please consult with a qualified immigration attorney.
+                <p className="text-muted-foreground">
+                  This dashboard presents user-reported data for informational
+                  and advocacy purposes only. The data may contain inaccuracies,
+                  is not exhaustive, and{" "}
+                  <strong>does not constitute legal advice</strong>. If you are
+                  experiencing immigration issues, please consult with a
+                  qualified immigration attorney.
                 </p>
               </CardContent>
             </Card>
@@ -382,5 +498,5 @@ export default function DashboardPage() {
         </DashboardShell>
       </div>
     </>
-  )
+  );
 }
