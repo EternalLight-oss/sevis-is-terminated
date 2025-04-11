@@ -35,9 +35,9 @@ const emailSchema = z.object({
   email: z
     .string()
     .email("Please enter a valid email address")
-    .refine((email) => email.toLowerCase().endsWith(".edu"), {
-      message: "Please enter a valid .edu email address",
-    }),
+    // .refine((email) => email.toLowerCase().endsWith(".edu"), {
+    //   message: "Please enter a valid .edu email address",
+    // }),
 });
 
 type EmailFormValues = z.infer<typeof emailSchema>;
@@ -134,7 +134,7 @@ export function EmailVerification({
 
                         <FormControl>
                           <Input
-                            placeholder="your.email@university.edu"
+                            placeholder="your.email@example.com"
                             {...field}
                             onChange={handleEmailChange}
                           />
@@ -162,8 +162,7 @@ export function EmailVerification({
                           </AlertDescription>
                         </Alert>
                         <FormDescription>
-                          Enter the .edu email you used when submitting your
-                          data.
+                        Enter the email you used when submitting your data.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>

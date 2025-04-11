@@ -75,10 +75,10 @@ import { hashEmail, shortenHash } from "@/lib/hash-utils";
 const formSchema = z.object({
   email: z
     .string()
-    .email("Please enter a valid email address")
-    .refine((email) => email.toLowerCase().endsWith(".edu"), {
-      message: "Please enter a valid .edu email address",
-    }),
+    .email("Please enter a valid email address"),
+    // .refine((email) => email.toLowerCase().endsWith(".edu"), {
+    //   message: "Please enter a valid .edu email address",
+    // }),
   university: z.string().min(1, "Please select your university"),
   other_university: z.string().optional(),
   nationality: z.string().min(1, "Please select your nationality"),
@@ -476,11 +476,11 @@ export default function FormPage() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email Address (.edu required)</FormLabel>
+                      <FormLabel>Email Address</FormLabel>
 
                       <FormControl>
                         <Input
-                          placeholder="your.email@university.edu"
+                          placeholder="your.email@example.com"
                           {...field}
                           onChange={handleEmailChange}
                         />
